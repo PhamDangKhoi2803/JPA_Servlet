@@ -1,0 +1,111 @@
+package io.vnstar.controller.admin;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.List;
+
+import io.vnstar.entity.Category;
+import io.vnstar.entity.Video;
+import io.vnstar.service.IVideoService;
+import io.vnstar.service.impl.VideoService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
+@WebServlet(urlPatterns = { "/admin/videos", "/admin/video/insert", "/admin/video/add",
+							"/admin/video/update", "/admin/video/edit" })
+public class VideoController extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+	IVideoService videoService = new VideoService();
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+
+		String url = req.getRequestURI();
+		if (url.contains("/admin/videos")) {
+			int id = Integer.parseInt(req.getParameter("id"));
+			List<Video> list = videoService.findByIdCategory(id);
+			req.setAttribute("listvideo", list);
+			req.getRequestDispatcher("/views/admin/video-list.jsp").forward(req, resp);
+		} else if (url.contains("/admin/video/add")) {
+			// else if (url.contains("add")){
+			req.getRequestDispatcher("/views/admin/video-add.jsp").forward(req, resp);
+		} else if (url.contains("/admin/video/edit")) {
+			int id = Integer.parseInt(req.getParameter("id"));
+			Video video = videoService.findById(id);
+			req.setAttribute("video", video);
+			req.getRequestDispatcher("/views/admin/video-edit.jsp").forward(req, resp);
+		} 
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+		String url = req.getRequestURI();
+		
+		if (url.contains("/admin/video/insert")) {
+			Video video = new Video();
+			// lay du lieu tu form
+			String title = req.getParameter("title");
+			int active = Integer.parseInt(req.getParameter("status"));
+			String description = req.getParameter("description");
+			int view = Integer.parseInt(req.getParameter("views"));
+			String videoid = req.getParameter("videoid");
+			
+			Category category = new Category();
+			int id =Integer.parseInt(req.getParameter("categoryid"));
+            category.setCategoryid(id);
+            
+			// dua du lieu vao model
+			video.setTitle(title);
+			video.setActive(active);
+			video.setDescription(description);
+			video.setViews(view);
+			video.setVideoId(videoid);
+			video.setCategory(category);
+			
+			// Upload Images
+			String fname = "";
+			String uploadPath = io.vnstar.utils.Constant.UPLOAD_DIRECTORY;
+			File uploadDir = new File(uploadPath);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdir();
+			}
+			try {
+				Part part = req.getPart("poster");
+				if (part.getSize() > 0) {
+					String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+					// rename file
+					int index = filename.lastIndexOf(".");
+					String ext = filename.substring(index + 1);
+					fname = System.currentTimeMillis() + "." + ext;
+					// upload file
+					part.write(uploadPath + "/" + fname);
+					// ghi ten file vao data
+					video.setPoster(fname);
+					// } else if (images != null) {
+					// category.setImages(images);
+				} else {
+					video.setPoster("avatar.png");
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+
+			videoService.insert(video);
+			// tra ve view
+			resp.sendRedirect(req.getContextPath() + "/admin/videos?id="+id);
+		} 
+	}
+}

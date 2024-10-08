@@ -63,6 +63,7 @@ public class CategoryController extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		String url = req.getRequestURI();
+		
 		if (url.contains("/admin/category/insert")) {
 			Category category = new Category();
 			// lay du lieu tu form

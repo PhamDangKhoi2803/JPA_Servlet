@@ -35,10 +35,6 @@ public class Video implements Serializable {
 	@NotEmpty(message = "Không được bỏ trống")
 	private String title;
 
-	public Video() {
-		super();
-	}
-
 	@Column(name = "Views")
 	private int views;
 
@@ -47,6 +43,10 @@ public class Video implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "CategoryId")
 	private Category category;
+	
+	public Video() {
+		
+	}
 
 	public String getVideoId() {
 		return videoId;
