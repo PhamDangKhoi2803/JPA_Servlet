@@ -46,7 +46,7 @@ public class VideoController extends HttpServlet {
 			req.getRequestDispatcher("/views/admin/video-edit.jsp").forward(req, resp);
 		} else if (url.contains("/admin/video/delete")) {
 			String videoid = req.getParameter("videoid");
-			int categoryid = Integer.parseInt(req.getParameter("id"));
+			int categoryid = Integer.parseInt(req.getParameter("categoryid"));
 			try {
 				videoService.delete(videoid);
 			} catch (Exception e) {

@@ -54,7 +54,7 @@
 		<td><a
 				href="<c:url value='/admin/video/edit?videoid=${video.videoId}'/>">Sửa</a>
 				<a
-				href="<c:url value='/admin/video/delete?videoid=${video.videoId}'/>">Xóa</a>
+				href="<c:url value='/admin/video/delete?videoid=${video.videoId}&categoryid=${video.category.categoryid }'/>">Xóa</a>
 				</td>
     </tr>
     </c:forEach>
