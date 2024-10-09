@@ -10,7 +10,7 @@
 %>
 
 <form action="${pageContext.request.contextPath }/admin/video/insert" method="post" enctype="multipart/form-data">
-	<input type="text" id="categoryid" name="categoryid" value = "${categoryId}"><br>
+	<input type="text" id="categoryid" name="categoryid" value = "${categoryId}" hidden ="hidden"><br>
 	<label for="videoid">Video ID:</label><br>
 	<input type="text" id = "videoid" name = "videoid"><br>
 	<label for="title">Video Name:</label><br> 	

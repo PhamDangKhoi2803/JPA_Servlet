@@ -11,8 +11,6 @@
 %>
 
 <a href="<c:url value='/admin/video/add?id=${categoryId}'/>">Add video</a> 
-<%-- <a href="<c:url value='/admin/video/edit?id=${categoryId}'/>">Sửa</a> | 
-<a href="<c:url value='/admin/category/delete?id=${cate.categoryid }'/>">Xóa</a> --%>
 <table border="1" width="100%">
     <tr>
         <th>STT</th>
@@ -54,9 +52,9 @@
         <td>${video.category.categoryid}</td>
 	
 		<td><a
-				href="<c:url value='/admin/video/edit?id=${categoryId}'/>">Sửa</a>
+				href="<c:url value='/admin/video/edit?videoid=${video.videoId}'/>">Sửa</a>
 				<a
-				href="<c:url value='/admin/video/delete?id=${categoryId}'/>">Xóa</a>
+				href="<c:url value='/admin/video/delete?videoid=${video.videoId}'/>">Xóa</a>
 				</td>
     </tr>
     </c:forEach>

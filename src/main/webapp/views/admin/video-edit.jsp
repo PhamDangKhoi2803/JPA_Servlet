@@ -2,15 +2,16 @@
 	pageEncoding="UTF-8"%>
 <%@ include file = "/taglib.jsp" %>
 
-<%
+<%-- <%
     // Lấy giá trị id từ URL
     String categoryId = request.getParameter("id");
     // Đặt categoryId vào request scope
     request.setAttribute("categoryId", categoryId);
-%>
+%> --%>
 
 <form action="${pageContext.request.contextPath }/admin/video/update" method="post" enctype="multipart/form-data">
-	<input type="text" id="categoryid" name="categoryid" value = "${categoryId}"><br>
+	<input type="text" id="categoryid" name="categoryid" value = "${video.category.categoryid}" hidden ="hidden"> 
+	<%-- <input type="text" id="videoid2" name="videoid2" value = "${video.videoId}" hidden ="hidden"> --%>
 	
 	<label for="videoid">Video ID:</label><br>
 	<input type="text" id = "videoid" name = "videoid" value = "${video.videoId}"><br>
@@ -23,7 +24,7 @@
             <c:url value="/image?fname=${video.poster}" var="imgUrl"></c:url>
         </c:if>
             <c:if test="${video.poster.substring(0,5) == 'https'}">
-                <c:url value="${video.poster}" var="imgUrl"></c:url>
+                <c:url value="/image?fname=${video.poster}" var="imgUrl"></c:url>
             </c:if>
             <img height="150" width="200" src="${imgUrl}" /><br>
 				
